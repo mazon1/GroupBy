@@ -1,59 +1,63 @@
+# Group By Project - Customizable Uplift Model
 
-<p align = "center" draggable=”false” ><img src="https://user-images.githubusercontent.com/37101144/161836199-fdb0219d-0361-4988-bf26-48b0fad160a3.png" 
-     width="200px"
-     height="auto"/>
-</p>
+This repository contains the source code for a customizable uplift model platform developed as part of the Group By Project at FourthBrain. The purpose of this project is to provide an easy-to-use framework for uplift modeling, which can be applied to various business use cases such as targeted marketing, customer retention, and revenue optimization.
 
+## Table of Contents
+### Introduction
+### Installation
+### Usage
+### Customization
+### Results and Evaluation
+### Demo
+### Contributing
+### License
 
+## Introduction
+Uplift modeling is a sub-field of machine learning that focuses on estimating the causal impact of a treatment (such as a marketing campaign) on a specific outcome (such as customer conversion). This model aims to predict the difference in the outcome between the treated and control groups, helping businesses make informed decisions about which customers to target with their campaigns.
 
-# <h1 align="center" id="heading"># Group-By-Project---FourthBrain-Team Members: Toyosi Bami, Uchenna Mgbaja
-</h1>
+## Installation
+To get started, clone the repository to your local machine using the following command:
 
+git clone https://github.com/toyobam92/Group-By-Project---FourthBrain-/tree/final/.git
+After cloning the repository, navigate to the project directory and install the required dependencies using the following command:
 
- 
+pip install -r requirements.txt
 
-### TEAM GROUPBY: Uplift model and Recommender System
+## Usage
+To run the customizable uplift model on your data, follow these steps:
 
-Welcome to the repository for our Capstone project for FourthBrain. This project aims to develop and implement novel approaches to modeling the impact of treatment on individual customers in a marketing context. Our team is composed of experienced data scientists and machine learning experts who are passionate about solving real-world problems with cutting-edge technology.
+Prepare your dataset in CSV format with the following columns:
 
-### Problem Statement
+treatment_tag: A binary variable indicating whether a customer received the treatment (1) or not (0).
+conversion: A binary variable indicating the target outcome, such as customer conversion (1) or not (0).
+Additional features that may influence the outcome (e.g., demographics, purchase history).
 
-In marketing, it's important to understand the impact of a treatment (such as a promotional campaign) on customer behavior. Conventional machine learning models, such as supervised learning algorithms, are not well-suited for this task because they assume that all customers are equally affected by the treatment. In reality, the impact of a treatment can vary greatly from one customer to another, based on factors such as past behavior and demographic characteristics.
+Run the experimentation notebook Uplift_model.ipynb on Jupyter using the MLRun framework. This notebook will train the model on the data and save the trained model in the mlrun folder. The model will then be moved to an S3 bucket for storage and deployment purposes. The training and testing datasets will be saved in CSV format under the dat folder.
 
-### Solution
+Deploy the main.py script on an AWS instance to run the Streamlit app using streamlit run main.py, which provides an interactive interface to for the campaign and model results 
 
-Uplift modeling is a specialized approach to marketing analysis that aims to estimate the individual impact of a treatment on customers. The goal of uplift modeling is to identify the customers who are most likely to be influenced by the treatment and to quantify the size of that impact. Our team is developing and implementing new uplift modeling algorithms and evaluating their performance on real-world datasets.
+## Customization
+You can customize the uplift model by modifying the settings in the Uplift_model.ipynb notebook, such as:
 
-### Repository Structure
+Choosing different uplift modeling techniques, such as Two-Model, Solo-Model and Class Transformation model and specifying the underlying classifier (e.g., logistic regression, random forest,XGBoost).
 
-The repository is structured as follows:
+Defining the performance metrics used to evaluate the model, such as area under the uplift curve (AUUC), Qini coefficient, and response rate.
 
-dat: contains the datasets that we will use for training and evaluating our models.
+## Results and Evaluation
+The model will output various performance metrics, including AUUC, Qini coefficient, and response rate, to help you assess the effectiveness of the uplift model. Additionally, the results will be visualized using charts to facilitate interpretation.
 
-nb:  contains the notebooks and source code for our Uplift machine learning models and any supporting functions.
+## Demo
+Visit the live demo of the Streamlit app deployed on AWS: http://3.235.28.171:8501/. The app allows  visualize the results interactively the campaign results and model results interactively 
 
-reports: contains presentations and technical reports that document our progress and findings.
-
-app: contains the app.py files for deployment.
-
-### Getting Started
-
-To get started with our project, clone the repository and install the required dependencies. The dependencies are listed in the requirements.txt file.
-
-
-### Link to Application
-
-[Link to Demo 1](https://mazon1-apps-appapp-8sfsyx.streamlit.app/)
-
-[Link to Demo 2]( https://mazon1-apps-appfinaluplift-c9w4hl.streamlit.app/)
-
-### Team Members
-
+## Team Members
 Our team consists of the following members:
 
-[Toyosi Bamidele](https://www.linkedin.com/in/toyosibamidele/)
+Toyosi Bamidele
 
-[Uchenna Mgbaja](https://www.linkedin.com/in/marianmgbaja/)
+Uchenna Mgbaja
 
+## Contributing
+We welcome contributions to improve and extend the functionality of this project. If you're interested in contributing, please fork the repository and create a pull request with your changes.
 
-
+## License
+This project is licensed under the MIT License. See the LICENSE file for details.
