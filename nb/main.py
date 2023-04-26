@@ -7,13 +7,16 @@ import streamlit as st
 import base64
 import altair_viewer
 import json
-from vega import VegaLite
+
+#from vega import VegaLite
 
 from datetime import datetime
 import os
 import pandas as pd
 import altair as alt
 from altair_saver import save as altair_saver
+from altair import VegaLite
+
 import boto3
 import mlflow.sklearn
 import pandas as pd
