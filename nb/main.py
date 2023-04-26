@@ -5,13 +5,15 @@ import streamlit as st
 #from selenium.webdriver.chrome.options import Options
 #from selenium import webdriver
 import base64
+import altair_viewer
 import json
 from vega import VegaLite
 
 from datetime import datetime
 import os
 import pandas as pd
-
+import altair as alt
+from altair_saver import save as altair_saver
 import boto3
 import mlflow.sklearn
 import pandas as pd
@@ -57,7 +59,7 @@ def grouped_count_plot():
     selected_groupby = st.selectbox("Select groupby option:", groupby_options)
 
     if selected_groupby == 'treatment_tag':
-        chart = alt.Chart(data).mark_bar().encode(
+        chart = air.Chart(data).mark_bar().encode(
             x=alt.X('treatment_tag:N', title='Treatment Tag', axis=alt.Axis(labelAngle=0)),
             y=alt.Y('count()', title='Count'),
             color=alt.Color('treatment_tag:N', legend=alt.Legend(title='Treatment Tag'))
@@ -189,7 +191,7 @@ def categorical_analysis():
     if st.button('Generate Plot'):
         if plot_type:
             chart = create_categorical_plot(data, selected_col, plot_type)
-            #st.altair_chart(chart)
+            st.altair_chart(chart)
 
 def numerical_analysis():
     st.write('Numerical Features')
@@ -203,7 +205,7 @@ def numerical_analysis():
     if st.button('Generate Plot'):
         if plot_type:
             chart = create_numerical_plot(data, selected_col, plot_type)
-            #st.altair_chart(chart, use_container_width=True)
+            st.altair_chart(chart, use_container_width=True)
   
   
 def prepare_data_for_plots(uplift_ct, trmnt_test, y_test, X_test_2):
@@ -421,19 +423,19 @@ def create_uplift_cat_countplot(df):
         'treatment_tag', 'conversion'])
     grouped = df.groupby('uplift_category')[variable].value_counts().unstack(fill_value=0)
     grouped = grouped.reset_index().melt(id_vars='uplift_category', var_name='value', value_name='count')
-    # Create the Altair plot
-#     chart = alt.Chart(grouped).mark_bar().encode(
-#         x=alt.X('uplift_category:N', axis=alt.Axis(title='Uplift category')),
-#         y=alt.Y('count:Q', axis=alt.Axis(title=f'{variable} count')),
-#         color=alt.Color('value:N', legend=alt.Legend(title='Value')),
-#         order=alt.Order('value:N')
-#     ).properties(
-#         width=800,
-#         height=400,
-#         title=f'{variable} counts by uplift category'
-#     ).interactive()
-#     chart = chart.configure_axis(labelAngle=0)
-#     return chart
+    Create the Altair plot
+    chart = alt.Chart(grouped).mark_bar().encode(
+        x=alt.X('uplift_category:N', axis=alt.Axis(title='Uplift category')),
+        y=alt.Y('count:Q', axis=alt.Axis(title=f'{variable} count')),
+        color=alt.Color('value:N', legend=alt.Legend(title='Value')),
+        order=alt.Order('value:N')
+    ).properties(
+        width=800,
+        height=400,
+        title=f'{variable} counts by uplift category'
+    ).interactive()
+    chart = chart.configure_axis(labelAngle=0)
+    return chart
 
 def explore_predicted_observations(df):
     category = st.selectbox('Select category', df['uplift_category'].unique())
@@ -668,19 +670,19 @@ def main():
         # Create and display the selected plot
         if selected_plot == 'Uplift Chart':
             uplift_chart = create_uplift_chart(df)
-            #st.altair_chart(uplift_chart, use_container_width=True)
+            st.altair_chart(uplift_chart, use_container_width=True)
         elif selected_plot == 'Scatter Plot':
             scatter_plot = create_scatter_plot_with_regression(df )
-            #st.altair_chart(scatter_plot, use_container_width=True)
+            st.altair_chart(scatter_plot, use_container_width=True)
         elif selected_plot == 'Box Plot':
             box_plot = create_box_plot(df )
-            #st.altair_chart(box_plot, use_container_width=True)
+            st.altair_chart(box_plot, use_container_width=True)
         elif selected_plot == 'Line Chart':
             line_chart = create_line_chart(df)
-            #st.altair_chart(line_chart, use_container_width=True)
+            st.altair_chart(line_chart, use_container_width=True)
         elif selected_plot == 'Bar Chart':
             bar_chart = create_bar_chart(df)
-            #st.altair_chart(bar_chart, use_container_width=True)
+            st.altair_chart(bar_chart, use_container_width=True)
     elif selected_tab == 'Uplift Segment':
         plot_data_df, (qini_x, qini_y), y_test, trmnt_test = clean()
         plot_options = [
@@ -694,18 +696,18 @@ def main():
         selected_plot = st.selectbox('Select a plot to display:', plot_options) 
         if selected_plot == 'Uplift Histogram':
             plot = uplift_histogram(plot_data_df)
-            #st.altair_chart(plot, use_container_width=True)
+            st.altair_chart(plot, use_container_width=True)
         elif selected_plot == 'Uplift Count Plot': 
             plot = uplift_count_plot(plot_data_df)
-            #st.altair_chart(plot, use_container_width=True)
+            st.altair_chart(plot, use_container_width=True)
         elif selected_plot == 'Uplift Bar Plot': 
             plot = uplift_bar_plot(plot_data_df)
-            #st.altair_chart(plot, use_container_width=True)
+            st.altair_chart(plot, use_container_width=True)
         elif selected_plot == 'Decision Tree Plot': 
             st.pyplot(decision_tree_plot(plot_data_df))
         elif selected_plot == 'Uplift by Variable': 
             plot = create_uplift_cat_countplot(plot_data_df)  
-            #st.altair_chart(plot, use_container_width=True)
+            st.altair_chart(plot, use_container_width=True)
         elif selected_plot == 'Explore and Download Predicted Observations': 
             category,href,category_df = explore_predicted_observations(plot_data_df)
             st.write(f'Explore Predicted Observations for {category} category')
@@ -713,7 +715,7 @@ def main():
             st.markdown(href, unsafe_allow_html=True)
         elif selected_plot == 'Qini Curve':   
            plot =  plot_qini_curve(qini_x, qini_y, y_test, trmnt_test, plot_data_df)
-           #st.altair_chart(plot, use_container_width=True)
+           st.altair_chart(plot, use_container_width=True)
         #elif selected_plot == 'Generate Report':
           # href = save_plots_and_generate_report(plot_data_df)
           # st.markdown(href, unsafe_allow_html=True)
@@ -721,7 +723,7 @@ def main():
         welcome_page()
     elif selected_tab == "Campaign Visualizations":
         plot = grouped_count_plot()
-        #st.altair_chart(plot, use_container_width=True)
+        st.altair_chart(plot, use_container_width=True)
         
 
         
