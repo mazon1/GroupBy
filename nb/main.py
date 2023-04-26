@@ -5,15 +5,16 @@ import streamlit as st
 #from selenium.webdriver.chrome.options import Options
 #from selenium import webdriver
 import base64
-#import altair_viewer
+import altair as alt
+from _saver import save as altair_saver
+import altair_viewer
 import json
 from vega import VegaLite
 
 from datetime import datetime
 import os
 import pandas as pd
-import altair as alt
-from altair_saver import save as altair_saver
+
 import boto3
 import mlflow.sklearn
 import pandas as pd
