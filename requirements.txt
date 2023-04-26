@@ -6,6 +6,7 @@ mlflow
 boto3
 catboost
 seaborn
-sklift==23.1.2
+sklift
 scipy
 matplotlib
+
