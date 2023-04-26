@@ -6,7 +6,7 @@ mlflow
 boto3
 catboost
 seaborn
-sklift
+scikit-uplift
 scipy
 matplotlib
 
