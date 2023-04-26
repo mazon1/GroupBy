@@ -198,16 +198,16 @@ def campaign_results():
     axs[2].plot(line_x, line_y, color='black', linestyle='--', linewidth=2)
 
      # Adjust the position of the y-axis label
-     axs[2].yaxis.set_label_coords(-0.15, 0.5)
+    axs[2].yaxis.set_label_coords(-0.15, 0.5)
 
      # Box plot of the response rates
-     sns.boxplot(data=[df['response_rate_control'], df['response_rate_treatment']], palette=['#55A868', '#4C72B0'], ax=axs[3])
-     axs[3].set_ylabel('Response rate', fontsize=14)
-     axs[3].set_title('Distribution of response rates', fontsize=14)
-     axs[3].tick_params(axis='both', labelsize=12)
-     plt.tight_layout()
-     st.set_option('deprecation.showPyplotGlobalUse', False)
-     st.pyplot(fig)
+    sns.boxplot(data=[df['response_rate_control'], df['response_rate_treatment']], palette=['#55A868', '#4C72B0'], ax=axs[3])
+    axs[3].set_ylabel('Response rate', fontsize=14)
+    axs[3].set_title('Distribution of response rates', fontsize=14)
+    axs[3].tick_params(axis='both', labelsize=12)
+    plt.tight_layout()
+    st.set_option('deprecation.showPyplotGlobalUse', False)
+    st.pyplot(fig)
      
 
 
