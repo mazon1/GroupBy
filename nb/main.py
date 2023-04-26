@@ -5,9 +5,6 @@ import streamlit as st
 #from selenium.webdriver.chrome.options import Options
 #from selenium import webdriver
 import base64
-import altair as alt
-from _saver import save as altair_saver
-import altair_viewer
 import json
 from vega import VegaLite
 
