@@ -11,3 +11,4 @@ scipy
 matplotlib
 altair-viewer
 vega
+altair_saver
