@@ -5,7 +5,7 @@ import streamlit as st
 #from selenium.webdriver.chrome.options import Options
 #from selenium import webdriver
 import base64
-import altair_viewer
+#import altair_viewer
 import json
 from vega import VegaLite
 
