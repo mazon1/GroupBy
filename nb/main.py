@@ -7,9 +7,7 @@ import streamlit as st
 import base64
 import json
 from vega import VegaLite
-#import altair_viewer
-import altair as alt
-from altair_saver import save as altair_saver
+
 from datetime import datetime
 import os
 import pandas as pd
