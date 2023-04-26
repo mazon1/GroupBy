@@ -13,6 +13,7 @@ import mlflow
 import mlflow.sklearn
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.tree import plot_tree
+import joblib
 
 
 categorical_features = ['job', 'marital', 'education', 'default', 'housing', 'loan', 'contact', 'poutcome', 'month']
@@ -129,98 +130,108 @@ def numerical_analysis():
         if plot_type:
             ax = create_plot(data, selected_col, plot_type)
             st.pyplot(ax.figure)
-
+		
 def campaign_results():
-        #st.write(os.listdir())
-        st.write('Campaign Results')
+    # Load trained model from specified file
+    loaded_model = joblib.load('nb/class_transformation_model')
+    X_test_2 = pd.read_csv('dat/X_test.csv')
+    y_test = pd.read_csv('dat/y_test.csv')
+    trmnt_test = pd.read_csv('dat/trmnt_test.csv')
+
+    uplift_ct = loaded_model.predict(X_test_2)
+
+    from sklift.metrics import uplift_by_percentile
+    ct_percentile = uplift_by_percentile(y_test, uplift_ct, trmnt_test,
+                                         strategy='overall',
+                                         total=True, std=True, bins=10)
+
+    df = pd.DataFrame(ct_percentile)
+
+    # Set the default style
+    sns.set_style('whitegrid')
+
+    # Bar chart of the number of participants
+    fig, axs = plt.subplots(figsize=(20, 10))
+    df[['n_treatment', 'n_control']].plot(kind='bar', stacked=False, ax=axs, width=0.8, color=['#4C72B0', '#55A868'])
+    axs.set_xlabel('Percentile', fontsize=14)
+    axs.set_ylabel('Number of participants', fontsize=14)
+    axs.tick_params(axis='both', labelsize=10)
+    axs.legend(fontsize=12)
+    plt.tight_layout()
+    st.pyplot(fig)
+
+    # Line chart of the response rates
+    fig, axs = plt.subplots(1, 4, figsize=(16, 4))
+    axs[0].plot(df.index, df['response_rate_treatment'], label='Treatment', color='#4C72B0', linewidth=2)
+    axs[0].plot(df.index, df['response_rate_control'], label='Control', color='#55A868', linewidth=2)
+    axs[0].set_xlabel('Percentile', fontsize=14)
+    axs[0].set_ylabel('Response rate', fontsize=14)
+    axs[0].tick_params(axis='both', labelsize=10)
+    axs[0].tick_params(axis='x', rotation=45)
+    axs[0].legend(fontsize=12)
+
+    # Bar chart of the uplift
+    axs[1].bar(df.index, df['uplift'], color='#4C72B0')
+    axs[1].set_xlabel('Percentile', fontsize=14)
+    axs[1].set_ylabel('Uplift', fontsize=14)
+    axs[1].tick_params(axis='both', labelsize=10)
+    axs[1].tick_params(axis='x', rotation=45)
+    # Adjust the position of the y-axis label
+    axs[1].yaxis.set_label_coords(-0.15, 0.5)
+
+    # Scatter plot of the response rates
+    axs[2].scatter(df['response_rate_control'], df['response_rate_treatment'], color='#4C72B0', alpha=0.7)
+    axs[2].set_xlabel('Control response rate', fontsize=14)
+    axs[2].set_ylabel('Treatment response rate', fontsize=14)
+    axs[2].tick_params(axis='both', labelsize=10)
+    axs[2].tick_params(axis='x', labelsize=10)
+
+    # Add a regression line
+    import numpy as np
+    from scipy.stats import linregress
+    x = df['response_rate_control']
+    y = df['response_rate_treatment']
+    slope, intercept, r_value, p_value, std_err = linregress(x, y)
+    # Plot the regression line
+    line_x = np.linspace(0, max(x))
+    line_y = slope * line_x + intercept
+    axs[2].plot(line_x, line_y, color='black', linestyle='--', linewidth=2)
+
+     # Adjust the position of the y-axis label
+     axs[2].yaxis.set_label_coords(-0.15, 0.5)
+
+     # Box plot of the response rates
+     sns.boxplot(data=[df['response_rate_control'], df['response_rate_treatment']], palette=['#55A868', '#4C72B0'], ax=axs[3])
+     axs[3].set_ylabel('Response rate', fontsize=14)
+     axs[3].set_title('Distribution of response rates', fontsize=14)
+     axs[3].tick_params(axis='both', labelsize=12)
+     plt.tight_layout()
+     st.set_option('deprecation.showPyplotGlobalUse', False)
+     st.pyplot(fig)
+     
+
+
+# def campaign_results():
+#         #st.write(os.listdir())
+#         st.write('Campaign Results')
         
-        #s3 = boto3.client('s3')
-        #bucket_name = 'uplift-model'
-	model_uri = 'nb/class_transformation_model'
-        #model_uri = 's3://{}/final/Group-By-Project---FourthBrain-/nb/mlruns/517342746135544475/af4b942074eb430c97be548979749e6b/artifacts/class_transformation_model'.format(bucket_name)
+#         #s3 = boto3.client('s3')
+#         #bucket_name = 'uplift-model'
+# 	model_uri = 'nb/class_transformation_model'
+#         #model_uri = 's3://{}/final/Group-By-Project---FourthBrain-/nb/mlruns/517342746135544475/af4b942074eb430c97be548979749e6b/artifacts/class_transformation_model'.format(bucket_name)
 
-# Load the model
-        loaded_model = mlflow.sklearn.load_model(model_uri=model_uri)
-        # Replace with the actual path to the MLflow model
-        #model_uri = "nb/mlruns/517342746135544475/af4b942074eb430c97be548979749e6b/artifacts/class_transformation_model"
+     
+
+
+# # Load the model
+#         loaded_model = mlflow.sklearn.load_model(model_uri=model_uri)
+#         # Replace with the actual path to the MLflow model
+#         #model_uri = "nb/mlruns/517342746135544475/af4b942074eb430c97be548979749e6b/artifacts/class_transformation_model"
         
-        # Load the model from the run
-        loaded_model = mlflow.sklearn.load_model(model_uri)
+#         # Load the model from the run
+#         loaded_model = mlflow.sklearn.load_model(model_uri)
         
-        X_test_2 = pd.read_csv('dat/X_test.csv')
-        y_test = pd.read_csv('dat/y_test.csv')
-        trmnt_test = pd.read_csv('dat/trmnt_test.csv')
-
-        uplift_ct = loaded_model.predict(X_test_2)
-
-        from sklift.metrics import uplift_by_percentile
-        ct_percentile = uplift_by_percentile(y_test, uplift_ct, trmnt_test,
-                                            strategy='overall',
-                                            total=True, std=True, bins=10)
-
-        df = pd.DataFrame(ct_percentile)
-
-        # Set the default style
-        sns.set_style('whitegrid')
-
-        # Bar chart of the number of participants
-        fig, axs = plt.subplots(figsize=(20, 10))
-        df[['n_treatment', 'n_control']].plot(kind='bar', stacked=False, ax=axs, width=0.8, color=['#4C72B0', '#55A868'])
-        axs.set_xlabel('Percentile', fontsize=14)
-        axs.set_ylabel('Number of participants', fontsize=14)
-        axs.tick_params(axis='both', labelsize=10)
-        axs.legend(fontsize=12)
-        plt.tight_layout()
-        st.pyplot(fig)
-
-        # Line chart of the response rates
-        fig, axs = plt.subplots(1, 4, figsize=(16, 4))
-        axs[0].plot(df.index, df['response_rate_treatment'], label='Treatment', color='#4C72B0', linewidth=2)
-        axs[0].plot(df.index, df['response_rate_control'], label='Control', color='#55A868', linewidth=2)
-        axs[0].set_xlabel('Percentile', fontsize=14)
-        axs[0].set_ylabel('Response rate', fontsize=14)
-        axs[0].tick_params(axis='both', labelsize=10)
-        axs[0].tick_params(axis='x', rotation=45)
-        axs[0].legend(fontsize=12)
-
-        # Bar chart of the uplift
-        axs[1].bar(df.index, df['uplift'], color='#4C72B0')
-        axs[1].set_xlabel('Percentile', fontsize=14)
-        axs[1].set_ylabel('Uplift', fontsize=14)
-        axs[1].tick_params(axis='both', labelsize=10)
-        axs[1].tick_params(axis='x', rotation=45)
-        # Adjust the position of the y-axis label
-        axs[1].yaxis.set_label_coords(-0.15, 0.5)
-
-        # Scatter plot of the response rates
-        axs[2].scatter(df['response_rate_control'], df['response_rate_treatment'], color='#4C72B0', alpha=0.7)
-        axs[2].set_xlabel('Control response rate', fontsize=14)
-        axs[2].set_ylabel('Treatment response rate', fontsize=14)
-        axs[2].tick_params(axis='both', labelsize=10)
-        axs[2].tick_params(axis='x', labelsize=10)
-
-        # Add a regression line
-        import numpy as np
-        from scipy.stats import linregress
-        x = df['response_rate_control']
-        y = df['response_rate_treatment']
-        slope, intercept, r_value, p_value, std_err = linregress(x, y)
-        # Plot the regression line
-        line_x = np.linspace(0, max(x))
-        line_y = slope * line_x + intercept
-        axs[2].plot(line_x, line_y, color='black', linestyle='--', linewidth=2)
-
-        # Adjust the position of the y-axis label
-        axs[2].yaxis.set_label_coords(-0.15, 0.5)
-
-        # Box plot of the response rates
-        sns.boxplot(data=[df['response_rate_control'], df['response_rate_treatment']], palette=['#55A868', '#4C72B0'], ax=axs[3])
-        axs[3].set_ylabel('Response rate', fontsize=14)
-        axs[3].set_title('Distribution of response rates', fontsize=14)
-        axs[3].tick_params(axis='both', labelsize=12)
-        plt.tight_layout()
-        st.set_option('deprecation.showPyplotGlobalUse', False)
-        st.pyplot(fig)
+        
 
 
 
