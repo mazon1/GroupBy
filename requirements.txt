@@ -10,4 +10,4 @@ scikit-uplift
 scipy
 matplotlib
 altair-viewer
-VegaLite
+vega
