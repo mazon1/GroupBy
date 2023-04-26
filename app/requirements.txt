@@ -1,0 +1,5 @@
+streamlit
+pip
+plotly
+pandas
+seaborn
