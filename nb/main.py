@@ -689,7 +689,7 @@ def main():
             
  
     elif selected_tab == 'Campaign Results':
-        data, plot_data_df ,X_test_2, y_test, trmnt_test = campaign_results()
+        df, plot_data_df ,X_test_2, y_test, trmnt_test = campaign_results()
              # Create a selection box for the plots
         plot_options = [
         'Uplift Chart',
