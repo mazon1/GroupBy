@@ -241,27 +241,7 @@ def load_data_model():
     trmnt_test = pd.read_csv('dat/trmnt_test.csv', header=None, names=['treatment'])
     return X_test_2, y_test, trmnt_test
 
-# def campaign_results():
-    
-#     # Load the model from the run
-#     loaded_model = joblib.load('nb/class_transformation_model/model.pkl')
 
-#     X_test_2 = pd.read_csv('dat/X_test.csv')
-#     y_test = pd.read_csv('dat/y_test.csv', header=None, names=['conversion'])
-#     trmnt_test = pd.read_csv('dat/trmnt_test.csv', header=None, names=['treatment'])
-
-#     # Make predictions
-#     uplift_ct = loaded_model.predict(X_test_2)
-
-#     # Calculate uplift by percentile
-#     ct_percentile = uplift_by_percentile(y_test, uplift_ct, trmnt_test,
-#                                          strategy='overall', total=True, std=True, bins=10)
-#     df = pd.DataFrame(ct_percentile)
-
-    
-#     plot_data_df = prepare_data_for_plots(uplift_ct, trmnt_test, y_test, X_test_2)
-
-#     return df, plot_data_df ,X_test_2, y_test, trmnt_test 
 
 
   
