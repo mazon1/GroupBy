@@ -223,15 +223,6 @@ def prepare_data_for_plots(uplift_ct, trmnt_test, y_test, X_test_2):
     return test_set_df          
             
 @st.cache_data
-def get_model_uri():
-    """
-    Retrieves the trained model from a given URI
-    """
-    model_uri = "nb/class_transformation_model/model.pkl"
-    loaded_model = joblib.load(model_uri)
-    return loaded_model
-
-
 def load_data_model():
     """
     Loads the necessary data for the model
@@ -241,19 +232,15 @@ def load_data_model():
     trmnt_test = pd.read_csv('dat/trmnt_test.csv', header=None, names=['treatment'])
     return X_test_2, y_test, trmnt_test
 
-
-
-
-  
-  
-
 @st.cache_resource
 def get_model_uri():
-      # Load trained model from specified file
-    loaded_model = joblib.load('nb/class_transformation_model')
-    return  loaded_model
+    """
+    Retrieves the trained model from a given URI
+    """
+    model_uri = "nb/class_transformation_model/model.pkl"
+    loaded_model = joblib.load(model_uri)
+    return loaded_model
   
- 
 
 @st.cache_data
 def load_data_model():
