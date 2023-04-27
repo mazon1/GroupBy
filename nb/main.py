@@ -226,7 +226,7 @@ def prepare_data_for_plots(uplift_ct, trmnt_test, y_test, X_test_2):
 def campaign_results():
     
     # Load the model from the run
-    loaded_model = joblib.load('nb/class_transformation_model')
+    loaded_model = joblib.load('nb/class_transformation_model/model.pkl')
 
     X_test_2 = pd.read_csv('dat/X_test.csv')
     y_test = pd.read_csv('dat/y_test.csv')
