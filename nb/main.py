@@ -238,7 +238,8 @@ def get_model_uri():
     Retrieves the trained model from a given URI
     """
     model_uri = "nb/class_transformation_model/model.pkl"
-    loaded_model = joblib.load(model_uri)
+    # Load the model
+    loaded_model = joblib.load(get_model_uri())
     return loaded_model
   
 
