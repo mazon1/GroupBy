@@ -47,7 +47,7 @@ Defining the performance metrics used to evaluate the model, such as area under 
 The model will output various performance metrics, including AUUC, Qini coefficient, and response rate, to help you assess the effectiveness of the uplift model. Additionally, the results will be visualized using charts to facilitate interpretation.
 
 ## Demo
-Visit the live demo of the [Streamlit app](https://mazon1-groupby-nbfrontend-jgn9yq.streamlit.app/). The app allows  visualize the results interactively the campaign results and model results interactively 
+Visit the live demo of the [Streamlit app](https://mazon1-groupby-nbmain-hhnkqk.streamlit.app/). The app allows  visualize the results interactively the campaign results and model results interactively 
 
 ## Team Members
 Our team consists of the following members:
