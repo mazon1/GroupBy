@@ -237,7 +237,7 @@ def get_model_uri():
     # Load the model
     loaded_model = joblib.load(get_model_uri())
     return loaded_model
- @st.cache_data
+@st.cache_data
 def campaign_results():
 
     # Load the model
