@@ -41,17 +41,16 @@ import joblib
 
 @st.cache_data
 def load_data():
-    #url_dat = 'https://media.githubusercontent.com/media/toyobam92/Group-By-Project---FourthBrain-/uplift_steps/dat/feature_eng_data.csv'
-    df = pd.read_csv('dat/feature_eng_data.csv')
-    return df
+    data = pd.read_csv('dat/feature_eng_data.csv')
     
     cat_cols = ['job', 'marital', 'education', 'default', 'housing', 'loan', 'contact',
-    'poutcome', 'month', 'age_0-25', 'age_25-35', 'age_35-50', 'age_50-100',
-    'days_0-7', 'days_7-14', 'days_14-21', 'days_21-31']
-    num_cols= ['age', 'balance', 'duration', 'pdays', 'previous']
+                'poutcome', 'month', 'age_0-25', 'age_25-35', 'age_35-50', 'age_50-100',
+                'days_0-7', 'days_7-14', 'days_14-21', 'days_21-31']
+    num_cols = ['age', 'balance', 'duration', 'pdays', 'previous']
     exclude_cols = ['treatment_tag', 'conversion']
 
     return data, cat_cols, num_cols, exclude_cols
+
 
 def grouped_count_plot():
     st.header("Treatment and Control Visualization")
