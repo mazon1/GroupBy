@@ -240,8 +240,8 @@ def campaign_results():
     ct_percentile = uplift_by_percentile(y_test, uplift_ct, trmnt_test,
                                          strategy='overall', total=True, std=True, bins=10)
     df = pd.DataFrame(ct_percentile)
-    df.iloc[-1,:] = ['total'] + ct_percentile.mean(axis=0).tolist()
 
+    
     plot_data_df = prepare_data_for_plots(uplift_ct, trmnt_test, y_test, X_test_2)
 
     return df, plot_data_df ,X_test_2, y_test, trmnt_test 
