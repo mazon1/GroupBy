@@ -235,16 +235,16 @@ def get_model_uri():
     """
     model_uri = "nb/class_transformation_model/model.pkl"
     # Load the model
-    loaded_model = joblib.load(get_model_uri())
+    loaded_model = joblib.load(model_uri)
     return loaded_model
+
 @st.cache_data
 def campaign_results():
-
     # Load the model
     loaded_model = get_model_uri()
     
     # Load data
-    #X_test_2, y_test, trmnt_test = load_data_model()
+    X_test_2, y_test, trmnt_test = load_data_model()
 
     # Make predictions
     uplift_ct = loaded_model.predict(X_test_2)
@@ -254,13 +254,9 @@ def campaign_results():
                                          strategy='overall', total=True, std=True, bins=10)
     df = pd.DataFrame(ct_percentile)
 
-    
     plot_data_df = prepare_data_for_plots(uplift_ct, trmnt_test, y_test, X_test_2)
 
-    return df, plot_data_df ,X_test_2, y_test, trmnt_test 
-           
-
-
+    return df, plot_data_df, X_test_2, y_test, trmnt_test
   
 
 
