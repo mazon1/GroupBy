@@ -223,6 +223,23 @@ def prepare_data_for_plots(uplift_ct, trmnt_test, y_test, X_test_2):
     return test_set_df   
 
 @st.cache_data
+def load_data_model():
+    X_test_2 = pd.read_csv('dat/X_test.csv')
+    y_test = pd.read_csv('dat/y_test.csv')
+    trmnt_test = pd.read_csv('dat/trmnt_test.csv')
+    return X_test_2, y_test, trmnt_test
+
+@st.cache_resource
+def get_model_uri():
+    """
+    Retrieves the trained model from a given URI
+    """
+    model_uri = "nb/class_transformation_model/model.pkl"
+    # Load the model
+    loaded_model = joblib.load(model_uri)
+    return loaded_model
+
+@st.cache_data
 def campaign_results():
     # Load the model
     loaded_model = get_model_uri()
@@ -241,22 +258,7 @@ def campaign_results():
     plot_data_df = prepare_data_for_plots(uplift_ct, trmnt_test, y_test, X_test_2)
 
     return df, plot_data_df, X_test_2, y_test, trmnt_test
-@st.cache_data
-def load_data_model():
-    X_test_2 = pd.read_csv('dat/X_test.csv')
-    y_test = pd.read_csv('dat/y_test.csv')
-    trmnt_test = pd.read_csv('dat/trmnt_test.csv')
-    return X_test_2, y_test, trmnt_test
 
-@st.cache_resource
-def get_model_uri():
-    """
-    Retrieves the trained model from a given URI
-    """
-    model_uri = "nb/class_transformation_model/model.pkl"
-    # Load the model
-    loaded_model = joblib.load(model_uri)
-    return loaded_model
 
   
 
