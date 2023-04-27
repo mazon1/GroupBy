@@ -244,7 +244,7 @@ def campaign_results():
     loaded_model = get_model_uri()
     
     # Load data
-    X_test_2, y_test, trmnt_test = load_data_model()
+    #X_test_2, y_test, trmnt_test = load_data_model()
 
     # Make predictions
     uplift_ct = loaded_model.predict(X_test_2)
