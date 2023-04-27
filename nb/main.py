@@ -562,10 +562,14 @@ def save_plots_and_generate_report(plot_data_df):
     # Remove the image files
     for plot_info in plots.values():
         os.remove(plot_info['filename'])
-        
-    b64_pdf = base64.b64encode(report_filename.read()).decode('utf-8')
+    with open(report_filename, "rb") as f:
+         b64_pdf = base64.b64encode(f.read()).decode('utf-8')
+    
     href = f'<a href="data:application/pdf;base64,{b64_pdf}" download="report.pdf">Download PDF</a>'
     return href
+        
+    
+
 
 def save_plots_and_generate_report(plot_data_df, driver):
     options = Options()
