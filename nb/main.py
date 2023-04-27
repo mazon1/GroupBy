@@ -224,11 +224,9 @@ def prepare_data_for_plots(uplift_ct, trmnt_test, y_test, X_test_2):
             
 @st.cache_data
 def campaign_results():
-    # Replace with the actual path to the MLflow model in your `nb` folder
-    model_uri = "nb/class_transformation_model"
-
+    
     # Load the model from the run
-    loaded_model = mlflow.sklearn.load_model(model_uri)
+    loaded_model = joblib.load('nb/class_transformation_model')
 
     X_test_2 = pd.read_csv('dat/X_test.csv')
     y_test = pd.read_csv('dat/y_test.csv')
