@@ -220,16 +220,12 @@ def prepare_data_for_plots(uplift_ct, trmnt_test, y_test, X_test_2):
     test_set_df = pd.concat([X_test_2.reset_index(drop=True), trmnt_test.reset_index(drop=True), y_test.reset_index(drop=True),  uplift_sm.reset_index(drop=True)], axis=1)
     test_set_df.columns = list(X_test_2.columns) + ['treatment_tag', 'conversion', 'uplift_score']
     
-    return test_set_df          
-            
+    return test_set_df   
 @st.cache_data
 def load_data_model():
-    """
-    Loads the necessary data for the model
-    """
     X_test_2 = pd.read_csv('dat/X_test.csv')
-    y_test = pd.read_csv('dat/y_test.csv', header=None, names=['conversion'])
-    trmnt_test = pd.read_csv('dat/trmnt_test.csv', header=None, names=['treatment'])
+    y_test = pd.read_csv('dat/y_test.csv')
+    trmnt_test = pd.read_csv('dat/trmnt_test.csv')
     return X_test_2, y_test, trmnt_test
 
 @st.cache_resource
@@ -241,14 +237,33 @@ def get_model_uri():
     # Load the model
     loaded_model = joblib.load(get_model_uri())
     return loaded_model
+ @st.cache_data
+def campaign_results():
+
+    # Load the model
+    loaded_model = get_model_uri()
+    
+    # Load data
+    X_test_2, y_test, trmnt_test = load_data_model()
+
+    # Make predictions
+    uplift_ct = loaded_model.predict(X_test_2)
+
+    # Calculate uplift by percentile
+    ct_percentile = uplift_by_percentile(y_test, uplift_ct, trmnt_test,
+                                         strategy='overall', total=True, std=True, bins=10)
+    df = pd.DataFrame(ct_percentile)
+
+    
+    plot_data_df = prepare_data_for_plots(uplift_ct, trmnt_test, y_test, X_test_2)
+
+    return df, plot_data_df ,X_test_2, y_test, trmnt_test 
+           
+
+
   
 
-@st.cache_data
-def load_data_model():
-    X_test_2 = pd.read_csv('dat/X_test.csv')
-    y_test = pd.read_csv('dat/y_test.csv')
-    trmnt_test = pd.read_csv('dat/trmnt_test.csv')
-    return X_test_2, y_test, trmnt_test
+
 
 def create_bar_chart(df):
     chart = alt.Chart(df.reset_index()).mark_bar().encode(
