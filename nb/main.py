@@ -248,11 +248,9 @@ def get_model_uri():
     """
     Retrieves the trained model from a given URI
     """
-    #model_uri = "nb/class_transformation_model/model.pkl"
-    model_uri = "nb/class_transformation_model"
+    model_uri = "nb/class_transformation_model/model.pkl"
     # Load the model
-    loaded_model = mlflow.sklearn.load_model(model_uri)
-    #loaded_model = joblib.load(model_uri)
+    loaded_model = joblib.load(model_uri)
     return loaded_model
 
 @st.cache_data
