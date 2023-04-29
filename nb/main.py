@@ -660,9 +660,8 @@ def main():
     st.set_page_config(page_title='Uplift Model', page_icon=':bar_chart:')
     st.title('Uplift Model - Campaign Analytics')
     
-    #tabs = ['Welcome', 'Campaign Visualizations','Exploratory Data Analysis', 'Campaign Results', 'Uplift Segment']
+    tabs = ['Welcome', 'Campaign Visualizations','Exploratory Data Analysis', 'Campaign Results', 'Uplift Segment']
     
-    tabs = ['Welcome', 'Campaign Visualizations','Exploratory Data Analysis']
     selected_tab = st.sidebar.radio('', tabs)
 
     if selected_tab == 'Exploratory Data Analysis':
