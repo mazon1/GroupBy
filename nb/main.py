@@ -222,43 +222,81 @@ def prepare_data_for_plots(uplift_ct, trmnt_test, y_test, X_test_2):
     
     return test_set_df   
 
-@st.cache_data
+# @st.cache_data
+# def load_data_model():
+#     X_test_2 = pd.read_csv('dat/X_test.csv')
+#     y_test = pd.read_csv('dat/y_test.csv')
+#     trmnt_test = pd.read_csv('dat/trmnt_test.csv')
+#     return X_test_2, y_test, trmnt_test
+
+# @st.cache_resource
+# def get_model_uri():
+#     """
+#     Retrieves the trained model from a given URI
+#     """
+#     model_uri = "nb/class_transformation_model/model.pkl"
+#     # Load the model
+#     loaded_model = joblib.load(model_uri)
+#     return loaded_model
+
+# @st.cache_data
+# def campaign_results():
+#     # Load the model
+#     loaded_model = get_model_uri()
+    
+#     # Load data
+#     X_test_2, y_test, trmnt_test = load_data_model()
+
+#     # Make predictions
+#     uplift_ct = loaded_model.predict(X_test_2)
+
+#     # Calculate uplift by percentile
+#     ct_percentile = uplift_by_percentile(y_test, uplift_ct, trmnt_test,
+#                                          strategy='overall', total=True, std=True, bins=10)
+#     df = pd.DataFrame(ct_percentile)
+
+#     plot_data_df = prepare_data_for_plots(uplift_ct, trmnt_test, y_test, X_test_2)
+
+#     return df, plot_data_df, X_test_2, y_test, trmnt_test
+
+
 def load_data_model():
     X_test_2 = pd.read_csv('dat/X_test.csv')
     y_test = pd.read_csv('dat/y_test.csv')
     trmnt_test = pd.read_csv('dat/trmnt_test.csv')
     return X_test_2, y_test, trmnt_test
 
-@st.cache_resource
-def get_model_uri():
-    """
-    Retrieves the trained model from a given URI
-    """
-    model_uri = "nb/class_transformation_model/model.pkl"
-    # Load the model
+def get_model(model_uri):
     loaded_model = joblib.load(model_uri)
     return loaded_model
 
-@st.cache_data
-def campaign_results():
-    # Load the model
-    loaded_model = get_model_uri()
-    
-    # Load data
-    X_test_2, y_test, trmnt_test = load_data_model()
+def predict_uplift(X, model):
+    uplift_scores = model.predict_proba(X)[:, 1]
+    return uplift_scores
 
-    # Make predictions
-    uplift_ct = loaded_model.predict(X_test_2)
+def rank_and_recommend(data, uplift_scores):
+    sorted_indices = uplift_scores.argsort()[::-1]
+    recommendations = data.iloc[sorted_indices, ['age', 'job', 'marital', 'education', 'balance']]
+    return recommendations
 
-    # Calculate uplift by percentile
-    ct_percentile = uplift_by_percentile(y_test, uplift_ct, trmnt_test,
-                                         strategy='overall', total=True, std=True, bins=10)
-    df = pd.DataFrame(ct_percentile)
+models = {'Classification Transformation': 'nb/class_transformation_model/model.pkl',
+          'Two Model': 'nb/class_transformation_model/model.pkl'}
 
-    plot_data_df = prepare_data_for_plots(uplift_ct, trmnt_test, y_test, X_test_2)
+#model was repeated but ideally should be a different model example: two_model_approach_model
 
-    return df, plot_data_df, X_test_2, y_test, trmnt_test
+st.title('Uplift Modeling App')
 
+model_name = st.selectbox('Select a Model', list(models.keys()))
+
+model_uri = models[model_name]
+
+X_test_2, y_test, trmnt_test = load_data_model()
+model = get_model(model_uri)
+uplift_scores = predict_uplift(X_test_2, model)
+recommendations = rank_and_recommend(y_test, uplift_scores)
+
+df = pd.DataFrame(uplift_scores)
+plot_data_df = prepare_data_for_plots(uplift_scores, trmnt_test, y_test, X_test_2)
 
   
 
