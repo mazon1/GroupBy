@@ -39,7 +39,7 @@ from sklift.metrics import uplift_auc_score
 from fpdf import FPDF
 import joblib
 
-@st.cache_data
+@st.cache
 def load_data():
     data = pd.read_csv('dat/feature_eng_data.csv')
     
