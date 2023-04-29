@@ -3,8 +3,8 @@ import pandas as pd
 import altair as alt
 import numpy as np
 from sklearn.model_selection import train_test_split
-from causalml.inference.tree import UpliftTreeClassifier
-from causalml.metrics import plot_gain, auuc_score, plot_uplift_by_percentile
+#from causalml.inference.tree import UpliftTreeClassifier
+#from causalml.metrics import plot_gain, auuc_score, plot_uplift_by_percentile
 
 @st.cache
 def load_data():
