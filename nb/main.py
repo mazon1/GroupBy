@@ -260,43 +260,7 @@ def prepare_data_for_plots(uplift_ct, trmnt_test, y_test, X_test_2):
 #     return df, plot_data_df, X_test_2, y_test, trmnt_test
 
 
-def load_data_model():
-    X_test_2 = pd.read_csv('dat/X_test.csv')
-    y_test = pd.read_csv('dat/y_test.csv')
-    trmnt_test = pd.read_csv('dat/trmnt_test.csv')
-    return X_test_2, y_test, trmnt_test
 
-def get_model(model_uri):
-    loaded_model = joblib.load(model_uri)
-    return loaded_model
-
-def predict_uplift(X, model):
-    uplift_scores = model.predict_proba(X)[:, 1]
-    return uplift_scores
-
-def rank_and_recommend(data, uplift_scores):
-    sorted_indices = uplift_scores.argsort()[::-1]
-    recommendations = data.iloc[sorted_indices, ['age', 'job', 'marital', 'education', 'balance']]
-    return recommendations
-
-models = {'Classification Transformation': 'nb/class_transformation_model/model.pkl',
-          'Two Model': 'nb/class_transformation_model/model.pkl'}
-
-#model was repeated but ideally should be a different model example: two_model_approach_model
-
-st.title('Uplift Modeling App')
-
-model_name = st.selectbox('Select a Model', list(models.keys()))
-
-model_uri = models[model_name]
-
-X_test_2, y_test, trmnt_test = load_data_model()
-model = get_model(model_uri)
-uplift_scores = predict_uplift(X_test_2, model)
-recommendations = rank_and_recommend(y_test, uplift_scores)
-
-df = pd.DataFrame(uplift_scores)
-plot_data_df = prepare_data_for_plots(uplift_scores, trmnt_test, y_test, X_test_2)
 
   
 
