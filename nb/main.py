@@ -349,19 +349,19 @@ def create_box_plot(df):
 
 
 
-def clean():
+# def clean():
     
-    df, plot_data_df ,X_test_2, y_test, trmnt_test  = campaign_results()
+#     df, plot_data_df ,X_test_2, y_test, trmnt_test  = campaign_results()
     
-    initial_quartile_values = [0, 0.2, 0.5, 0.8, 1]
-    quartile_values = [st.sidebar.number_input(f'Value for {i}% quartile', min_value=0.0, max_value=1.0, value=float(initial_quartile_values[i]), step=0.1) for i in range(5)]
+#     initial_quartile_values = [0, 0.2, 0.5, 0.8, 1]
+#     quartile_values = [st.sidebar.number_input(f'Value for {i}% quartile', min_value=0.0, max_value=1.0, value=float(initial_quartile_values[i]), step=0.1) for i in range(5)]
     
-    label_names = ['Sleeping Dogs', 'Lost Causes', 'Sure Things', 'Persuadables']
-    plot_data_df['uplift_category'] = pd.qcut(plot_data_df['uplift_score'], q=quartile_values, labels=label_names, duplicates='drop')
+#     label_names = ['Sleeping Dogs', 'Lost Causes', 'Sure Things', 'Persuadables']
+#     plot_data_df['uplift_category'] = pd.qcut(plot_data_df['uplift_score'], q=quartile_values, labels=label_names, duplicates='drop')
     
-    qini_x, qini_y = qini_curve(y_test, plot_data_df['uplift_score'], trmnt_test)
+#     qini_x, qini_y = qini_curve(y_test, plot_data_df['uplift_score'], trmnt_test)
     
-    return plot_data_df, (qini_x, qini_y), y_test, trmnt_test
+#     return plot_data_df, (qini_x, qini_y), y_test, trmnt_test
 
 
 def uplift_histogram(df):
