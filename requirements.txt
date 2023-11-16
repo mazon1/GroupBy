@@ -14,3 +14,4 @@ vega
 altair_saver
 fpdf
 
+selenium>=4.15.1 # not directly required, pinned by Snyk to avoid a vulnerability
